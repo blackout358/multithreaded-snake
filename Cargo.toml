@@ -1,0 +1,9 @@
+[package]
+name = "snake"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.26", features = ["cargo"] }
+crossterm = "0.28.1"
+rand = "0.8.5"
