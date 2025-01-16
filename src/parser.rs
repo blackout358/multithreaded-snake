@@ -83,10 +83,10 @@ fn multi_threaded() {
 
     enable_raw_mode().unwrap();
 
-    let _render_walkie = render_walkie_talkie.pair1;
+    let render_walkie = render_walkie_talkie.pair1;
     let render_lock = game_lock.clone();
 
-    let _render_thread = thread::spawn(move || -> std::result::Result<(), ()> {
+    let render_thread = thread::spawn(move || -> std::result::Result<(), ()> {
         let talkie = render_walkie_talkie.pair2;
         let mut stdout = stdout();
         let mut i = 0;
@@ -104,10 +104,10 @@ fn multi_threaded() {
 
     let input_walkie_talkie = WalkieTalkie::new();
 
-    let _input_walkie = input_walkie_talkie.pair1;
+    let input_walkie = input_walkie_talkie.pair1;
     let input_lock = game_lock.clone();
 
-    let _input_thread = thread::spawn(move || -> std::result::Result<(), ()> {
+    let input_thread = thread::spawn(move || -> std::result::Result<(), ()> {
         let local_lock = input_lock.clone();
         let talkie = input_walkie_talkie.pair2;
         while talkie.1.recv().unwrap() == 0 {
@@ -140,19 +140,19 @@ fn multi_threaded() {
             let game_lock = game_lock.lock().unwrap();
 
             if game_lock.quit {
-                _input_walkie.0.send(1).unwrap();
-                _render_walkie.0.send(1).unwrap();
+                input_walkie.0.send(1).unwrap();
+                render_walkie.0.send(1).unwrap();
                 break;
             }
         }
 
-        _input_walkie.0.send(0).unwrap();
-        _render_walkie.0.send(0).unwrap();
+        input_walkie.0.send(0).unwrap();
+        render_walkie.0.send(0).unwrap();
         std::thread::sleep(Duration::from_millis(50));
     }
 
     disable_raw_mode().unwrap();
 
-    _input_thread.join().unwrap().unwrap();
-    _render_thread.join().unwrap().unwrap();
+    input_thread.join().unwrap().unwrap();
+    render_thread.join().unwrap().unwrap();
 }

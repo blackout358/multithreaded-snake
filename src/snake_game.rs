@@ -8,7 +8,7 @@ use rand::{thread_rng, Rng};
 use std::{
     cmp::Reverse,
     collections::BinaryHeap,
-    io::{stdout, Stdout, Write},
+    io::{Stdout, Write},
     sync::mpsc::{Receiver, Sender},
 };
 
@@ -64,7 +64,6 @@ impl Snake {
 }
 pub struct SnakeGame {
     pub board: [[u8; WIDTH]; HEIGHT],
-    _next_colour: u8,
     snake: Snake,
     pub quit: bool,
     pub highscores: BinaryHeap<Reverse<u16>>,
@@ -73,7 +72,6 @@ pub struct SnakeGame {
 impl SnakeGame {
     pub fn new() -> Self {
         let mut board: [[u8; WIDTH]; HEIGHT] = [[0; WIDTH]; HEIGHT];
-        let mut _stdout = stdout();
 
         for (i, row) in board.iter_mut().enumerate() {
             for (j, value) in row.iter_mut().enumerate() {
@@ -100,7 +98,6 @@ impl SnakeGame {
         let game = SnakeGame {
             board,
             snake,
-            _next_colour: 0,
             quit: false,
             highscores: BinaryHeap::new(),
         };
